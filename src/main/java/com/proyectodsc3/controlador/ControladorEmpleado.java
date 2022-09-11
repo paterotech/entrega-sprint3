@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -61,6 +63,31 @@ public class ControladorEmpleado {
 			return new ResponseEntity<Empleado>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	
+	@PatchMapping("/empleados/{id}")
+    public ResponseEntity<?> actualizarEmpleadoPatch(@RequestBody Empleado empleado, @PathVariable Long id ){
+
+		try {
+			Empleado empleadoActual = servicio.obtenerEmpleadoId(id);
+			
+			if(StringUtils.hasLength(empleado.getNombre())) {
+				empleadoActual.setNombre(empleado.getNombre());
+			}
+			
+			if(StringUtils.hasLength(empleado.getCorreo())){
+				empleadoActual.setCorreo(empleado.getCorreo());
+			}			
+
+			servicio.guardarEmpleado(empleadoActual);
+
+			return new ResponseEntity<Empleado>(HttpStatus.OK);
+
+		}catch(Exception exception) {
+			return new ResponseEntity<Empleado>(HttpStatus.NOT_FOUND);
+		}
+    }
+	
 	
 	@DeleteMapping("/empleados/{id}")
 	public void eliminarEmpleado(@PathVariable Long id) {

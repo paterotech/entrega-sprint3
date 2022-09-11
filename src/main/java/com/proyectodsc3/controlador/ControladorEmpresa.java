@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.proyectodsc3.entidades.Empresa;
-import com.proyectodsc3.entidades.MovimientoDinero;
 import com.proyectodsc3.servicio.EmpresaServicio;
-import com.proyectodsc3.servicio.MovimientoServicio;
 
 @RestController
 public class ControladorEmpresa {
@@ -26,13 +24,12 @@ public class ControladorEmpresa {
 	@Autowired
 	private EmpresaServicio servicio;
 	
-	@Autowired
-	private MovimientoServicio service;
 	
 	@GetMapping("/empresas")
 	public List<Empresa> listarEmpresas(){
 		return servicio.listarEmpresa();
 	}
+	
 	
 	
 	@GetMapping("/empresas/{id}")
@@ -45,15 +42,6 @@ public class ControladorEmpresa {
 		}
 	}
 	
-	@GetMapping("/empresas/{id}/movimientos")
-	public ResponseEntity<MovimientoDinero> obtenerEmpresaMovimiento(@PathVariable Long id){
-		try {
-			MovimientoDinero movDinero = service.obtenerMovimiento(id);
-			return new ResponseEntity<MovimientoDinero>(movDinero, HttpStatus.OK);
-		}catch(Exception exception) {
-			return new ResponseEntity<MovimientoDinero>(HttpStatus.NOT_FOUND);
-		}
-	}
 	
 	
 	@PostMapping("/empresas")
@@ -78,12 +66,6 @@ public class ControladorEmpresa {
 		}
 	}
 	
-//	@PatchMapping("/empresas/{id}")
-//	public void actualizarPatchEmpresa(@RequestBody Empresa empresa, @PathVariable Long id ){
-//		servicio.guardarEmpresa(empresa);
-//	}
-//	
-	
 	@PatchMapping("/empresas/{id}")
     public ResponseEntity<?> actualizarEmpresaPatch(@RequestBody Empresa empresa, @PathVariable Long id ){
 
@@ -92,32 +74,30 @@ public class ControladorEmpresa {
 			if(StringUtils.hasLength(empresa.getNombre())) {
 				empresaActual.setNombre(empresa.getNombre());
 			}
-			
-//			empresaActual.setDireccion(empresa.getDireccion());
-//			empresaActual.setTelefono(empresa.getTelefono());
-//			empresaActual.setNit(empresa.getNit());
-			
-			
+			if(StringUtils.hasLength(empresa.getDireccion())){
+				empresaActual.setDireccion(empresa.getDireccion());
+			}
+			if(StringUtils.hasLength(empresa.getNit())){
+				empresaActual.setNit(empresa.getNit());
+			}
+			if(StringUtils.hasLength(empresa.getTelefono())){
+				empresaActual.setTelefono(empresa.getTelefono());
+			}
+
 			servicio.guardarEmpresa(empresaActual);
-			
+
 			return new ResponseEntity<Empresa>(HttpStatus.OK);
-			
+
 		}catch(Exception exception) {
 			return new ResponseEntity<Empresa>(HttpStatus.NOT_FOUND);
 		}
     }
 	
 	
-	
-		
-	
 	@DeleteMapping("/empresas/{id}")
 	public void eliminarEmpresa(@PathVariable Long id) {
-		
 		servicio.eliminarEmpresa(id);
 	}
-
-	
 	
 
 }

@@ -1,6 +1,5 @@
 package com.proyectodsc3.entidades;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -14,7 +13,6 @@ import java.time.LocalDate;
 public class Perfil {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private String id;
 
@@ -25,7 +23,7 @@ public class Perfil {
     private String telefono;
     
 
-    @OneToOne
+    @OneToOne(cascade={CascadeType.REMOVE}, orphanRemoval=true)
     @JoinColumn(name = "id_empleado", insertable = false, updatable = false)
     private Empleado empleado;
 
@@ -34,15 +32,13 @@ public class Perfil {
 
     @Column(name = "fecha_actual")
     private LocalDate updatedAt;
-    
-    
-   
+      
 
     public Perfil(){
 
     }
 
-    @Autowired
+    
     public Perfil(String id, String imagen, String telefono, Empleado empleado, LocalDate createdAt, LocalDate updatedAt) {
         this.id = id;
         this.imagen = imagen;

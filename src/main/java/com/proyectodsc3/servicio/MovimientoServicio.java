@@ -14,6 +14,8 @@ public class MovimientoServicio {
 	@Autowired
 	private IMovimientoRepo repositorio;
 	
+		
+	
 	public List<MovimientoDinero> listarMovimiento(){
 		return repositorio.findAll();
 	}

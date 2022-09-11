@@ -37,8 +37,6 @@ public class MovimientoDinero {
 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id", insertable = false, updatable = false)
-	//@JsonProperty(access = Access.WRITE_ONLY)
-	//(fetch = FetchType.LAZY)
 	private Empresa empresa;
 	
 	@Column(name = "fecha_creacion")
@@ -114,14 +112,6 @@ public class MovimientoDinero {
 	public void setUpdatedAt(LocalDate updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
-	
-	
-	
-	
-//	@ManyToOne
-//	@JoinColumn(name="id_empresa")
-//	private Empresa empresa;
 	
 	
 

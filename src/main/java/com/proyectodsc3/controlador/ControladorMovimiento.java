@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,6 +24,7 @@ public class ControladorMovimiento {
 	
 	@Autowired
 	private MovimientoServicio servicio;
+	
 	
 	
 	@GetMapping("/movimientos")
@@ -59,6 +62,31 @@ public class ControladorMovimiento {
 			return new ResponseEntity<MovimientoDinero>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	
+	@PatchMapping("/movimientos/{id}")
+    public ResponseEntity<?> actualizarMovimientoPatch(@RequestBody MovimientoDinero movimiento, @PathVariable Long id ){
+
+		try {
+			MovimientoDinero movimientoActual = servicio.obtenerMovimiento(id);
+			
+			if(StringUtils.hasLength(movimiento.getConcepto())) {
+				movimientoActual.setConcepto(movimiento.getConcepto());
+			}
+			
+//			if(StringUtils.hasLength(movimiento.getCantidad())){
+//				movimientoActual.setCantidad(movimiento.getCantidad());
+//			}
+
+			servicio.guardarMovimiento(movimientoActual);
+
+			return new ResponseEntity<MovimientoDinero>(HttpStatus.OK);
+
+		}catch(Exception exception) {
+			return new ResponseEntity<MovimientoDinero>(HttpStatus.NOT_FOUND);
+		}
+    }
+	
 	
 	@DeleteMapping("/movimientos/{id}")
 	public void eliminarMovimiento(@PathVariable Long id) {

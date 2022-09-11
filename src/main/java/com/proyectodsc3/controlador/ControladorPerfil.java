@@ -1,12 +1,12 @@
 package com.proyectodsc3.controlador;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.proyectodsc3.entidades.Empleado;
 import com.proyectodsc3.entidades.Perfil;
 import com.proyectodsc3.servicio.PerfilServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,6 +58,29 @@ public class ControladorPerfil {
             return new ResponseEntity<Perfil>(HttpStatus.NOT_FOUND);
         }
     }
+    
+    @PatchMapping("/perfiles/{id}")
+    public ResponseEntity<?> actualizarPerfilPatch(@RequestBody Perfil perfil, @PathVariable String id ){
+
+		try {
+			Perfil perfilActual = servicio.obtenerPerfilId(id);
+			
+			if(StringUtils.hasLength(perfil.getImagen())) {
+				perfilActual.setImagen(perfil.getImagen());
+			}
+			if(StringUtils.hasLength(perfil.getTelefono())){
+				perfilActual.setTelefono(perfil.getTelefono());
+			}
+
+			servicio.guardarPerfil(perfilActual);
+
+			return new ResponseEntity<Perfil>(HttpStatus.OK);
+
+		}catch(Exception exception) {
+			return new ResponseEntity<Perfil>(HttpStatus.NOT_FOUND);
+		}
+    }
+    
 
     @DeleteMapping("/perfiles/{id}")
     public void eliminarPerfil(@PathVariable String id) {

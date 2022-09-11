@@ -117,9 +117,9 @@ public class Empresa {
 
 	public void setMovimiento(List<MovimientoDinero> movimiento) {
 		this.movimientos = movimiento;
-		for(MovimientoDinero movimientoDinero : movimiento) {
-			movimientoDinero.setEmpresa(this);
-		}
+//		for(MovimientoDinero movimientoDinero : movimiento) {
+//			movimientoDinero.setEmpresa(this);
+//		}
 	}
 
 
@@ -130,10 +130,7 @@ public class Empresa {
 
 	public void setEmpleados(List<Empleado> empleados) {
         this.empleados = empleados;
-//        for (Empleado empleado1 : empleados){
-//            empleado1.setEmpresa(this);
-//            
-//        }
+
     }
 
 
@@ -155,15 +152,6 @@ public class Empresa {
 	public void setUpdatedAt(LocalDate updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
-	
-	
-	
-	
-//	@JsonIgnore
-//	@OneToMany
-//	@JoinColumn
-//	private Set<MovimientoDinero> movimiento = new HashSet<>();
 	
 	
 }

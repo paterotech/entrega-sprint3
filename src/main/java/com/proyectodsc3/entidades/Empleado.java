@@ -9,7 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,8 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 @Entity
@@ -30,12 +27,14 @@ public class Empleado {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id_emp")
 	private long id;
+	
 	@Column(name = "nombre")
 	private String nombre;
-	@Column(name = "correo")
+	
+	@Column(name = "correo", unique = true)
 	private String correo;	
 	
-	@OneToOne
+	@OneToOne(cascade={CascadeType.REMOVE}, orphanRemoval=true)
     @JoinColumn(name = "id_perfil", insertable = false, updatable = false)
     private Perfil perfil;
 	
@@ -48,8 +47,7 @@ public class Empleado {
     @JoinColumn(name = "id_empresa", insertable = false, updatable = false)
     private Empresa empresa;
 	
-	@OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
+	@OneToMany(mappedBy = "empleado", cascade={CascadeType.REMOVE}, orphanRemoval=true)
     private List<MovimientoDinero> movimientos = new ArrayList<>();
 	
 	
